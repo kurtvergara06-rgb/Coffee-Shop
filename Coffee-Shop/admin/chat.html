@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Admin Chat | Bat Cave Café</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="chat.css">
+	<link rel="stylesheet" href="Dashboard.css">
+</head>
+<body>
+	<div class="admin-wrapper">
+		<aside class="admin-sidebar">
+			<h2 class="admin-logo">☕ CoffeeAdmin</h2>
+			<ul>
+				<li><a href="Dashboard.html">Dashboard</a></li>
+				<li><a href="Resrvation.html">Reservation</a></li>
+				<li><a href="Profit.html">Profit</a></li>
+				 <li class="active"><a href="Chat.html">Chat</a></li>
+			</ul>
+			<a class="logout-btn" href="login.html">Logout</a>
+		</aside>
+
+		<main class="admin-content">
+			<div class="container">
+				<div class="header">
+					<div>
+						<h1>💬 Chat</h1>
+						<p class="header-date" id="currentDate"></p>
+					</div>
+				</div>
+
+				<div class="chat-app">
+					<aside class="panel contacts">
+			<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+				<strong>Chats</strong>
+				<small style="color:var(--muted)">Admin</small>
+			</div>
+			<div class="search">
+				<input id="search" placeholder="Search chats or users" />
+			</div>
+
+			<div class="contact-list" id="contactList">
+				<div class="contact" data-name="Front Desk">
+					<div class="avatar">FD</div>
+					<div class="c-info">
+						<div class="name">Front Desk</div>
+						<div class="meta">2 new messages</div>
+					</div>
+				</div>
+				<div class="contact" data-name="Kitchen">
+					<div class="avatar" style="background:linear-gradient(135deg,#f97316,#f43f5e)">KT</div>
+					<div class="c-info">
+						<div class="name">Kitchen</div>
+						<div class="meta">Online</div>
+					</div>
+				</div>
+				<div class="contact" data-name="Manager">
+					<div class="avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">MG</div>
+					<div class="c-info">
+						<div class="name">Manager</div>
+						<div class="meta">Last seen 2h ago</div>
+					</div>
+				</div>
+			</div>
+		</aside>
+
+		<section class="panel chat-window">
+			<div class="chat-header">
+				<div style="display:flex;gap:12px;align-items:center">
+					<div class="avatar" style="width:44px;height:44px;border-radius:8px">FD</div>
+					<div>
+						<div style="font-weight:700">Front Desk</div>
+						<div style="font-size:12px;color:var(--muted)">Online — Serving orders</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="messages" id="messages">
+				<div class="msg">
+					Hi! Table 5 needs more water.
+					<span class="time">10:03 AM</span>
+				</div>
+				<div class="msg out">
+					Thanks — sending staff now.
+					<span class="time">10:04 AM</span>
+				</div>
+				<div class="msg">
+					Also order 12 is delayed.
+					<span class="time">10:05 AM</span>
+				</div>
+			</div>
+
+			<form class="composer" id="composer" onsubmit="return false">
+				<textarea id="inputMsg" placeholder="Type a message..."></textarea>
+				<button class="send-btn" id="sendBtn">Send</button>
+			</form>
+					</section>
+
+					<aside class="panel info">
+			<div>
+				<h4>Conversation Info</h4>
+				<div class="meta-box">
+					<p style="margin:0;color:var(--muted)">Participants: Front Desk, Admin</p>
+					<p style="margin:6px 0 0 0;color:var(--muted)">Tags: Priority</p>
+				</div>
+			</div>
+
+			<div>
+				<h4>Quick Actions</h4>
+				<div class="meta-box">
+					<button style="background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:8px;color:var(--muted);cursor:pointer">Mark resolved</button>
+				</div>
+			</div>
+		</aside>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<script>
+		// Basic interactivity: send messages and simple contact switching
+		const messagesEl = document.getElementById('messages');
+		const input = document.getElementById('inputMsg');
+		const sendBtn = document.getElementById('sendBtn');
+		const contactList = document.getElementById('contactList');
+
+		function scrollBottom(){messagesEl.scrollTop = messagesEl.scrollHeight}
+		scrollBottom();
+
+		sendBtn.addEventListener('click', ()=>{
+			const text = input.value.trim();
+			if(!text) return;
+			const wrap = document.createElement('div');
+			wrap.className = 'msg out';
+			wrap.innerHTML = `${text}<span class=\'time\'>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>`;
+			messagesEl.appendChild(wrap);
+			input.value='';
+			scrollBottom();
+		});
+
+		// Click contact to change header and clear messages (demo)
+		contactList.addEventListener('click', (e)=>{
+			const contact = e.target.closest('.contact');
+			if(!contact) return;
+			const name = contact.dataset.name || contact.querySelector('.name').textContent;
+			document.querySelector('.chat-header .avatar').textContent = name.split(' ').map(s=>s[0]).join('').slice(0,2);
+			document.querySelector('.chat-header div > div').textContent = name;
+			// demo: reset messages
+			messagesEl.innerHTML = '<div class="msg">Welcome to '+name+' chat.<span class="time">'+new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})+'</span></div>';
+			scrollBottom();
+		});
+
+		// search filter
+		document.getElementById('search').addEventListener('input', (e)=>{
+			const q = e.target.value.toLowerCase();
+			document.querySelectorAll('#contactList .contact').forEach(c=>{
+				const n = (c.dataset.name || c.textContent).toLowerCase();
+				c.style.display = n.includes(q) ? 'flex' : 'none';
+			});
+		});
+	</script>
+</body>
+</html>

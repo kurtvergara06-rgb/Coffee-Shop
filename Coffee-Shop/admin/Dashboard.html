@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coffee Shop Dashboard</title>
+  
+  <!-- Chart.js for charts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  
+  <!-- Styling -->
+  <link rel="stylesheet" href="Dashboard.css" />
+</head>
+<body>
+  <div class="admin-wrapper">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <h2 class="admin-logo">☕ CoffeeAdmin</h2>
+      <ul>
+        <li class="active"><a href="Dashboard.html">Dashboard</a></li>
+        <li><a href="Resrvation.html">Reservation</a></li>
+        <li><a href="Profit.html">Profit</a></li>
+        <li><a href="chat.html">Chat</a></li>
+      </ul>
+      <a class="logout-btn" href="login.html">Logout</a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-content">
+      <div class="container">
+        <!-- Header -->
+        <div class="header">
+          <div>
+            <h1>📊 Dashboard</h1>
+            <p class="header-date" id="currentDate"></p>
+          </div>
+          <button onclick="location.reload()">
+            <i class="fas fa-sync"></i> Refresh
+          </button>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="stats-grid" id="statsGrid">
+          <div class="loading"><p>Loading dashboard...</p></div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>Reservations by Status</h3>
+            <div class="chart-container">
+              <canvas id="reservationChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3>Revenue by Room Type</h3>
+            <div class="chart-container">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Reservations Table -->
+        <div class="breakdown-card">
+          <h3>Recent Reservations</h3>
+          <table class="breakdown-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Room</th>
+                <th class="number">Pax</th>
+                <th class="number">Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr><td colspan="7" class="loading"><div class="spinner"></div>Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+<script>
+  // Use relative API base so the page works regardless of hosting path
+  const API_BASE = '../api';
+  
+  // Store chart instances globally
+  let reservationChart = null;
+  let revenueChart = null;
+
+  // Format date
+  function formatDate(date) {
+    return new Intl.DateTimeFormat('en-US', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    }).format(new Date(date));
+  }
+
+  document.getElementById('currentDate').textContent = formatDate(new Date());
+
+  // Fetch and display stats
+  async function loadDashboard() {
+    try {
+      // Get counts
+      const countsRes = await fetch(`${API_BASE}/get_reservation_counts.php`);
+      const countsData = await countsRes.json();
+      console.log('Counts API Response:', countsData);
+
+      // Get reservations for charts
+      const reservationsRes = await fetch(`${API_BASE}/get_reservations.php`);
+      const reservationsData = await reservationsRes.json();
+      console.log('Reservations API Response:', reservationsData);
+
+      if (countsData.ok && reservationsData.ok) {
+        const counts = countsData.data;
+        const reservations = reservationsData.data || [];
+
+        // Update stat cards
+        updateStatCards(counts);
+
+        // Update charts
+        updateCharts(counts, reservations);
+
+        // Update table
+        updateTable(reservations);
+      } else {
+        console.error('API Error - Counts OK:', countsData.ok, 'Reservations OK:', reservationsData.ok);
+      }
+    } catch (error) {
+      console.error('Error loading dashboard:', error);
+      document.getElementById('statsGrid').innerHTML = '<div class="loading"><p style="color: red;">Error loading data: ' + error.message + '</p></div>';
+    }
+  }
+
+  function updateStatCards(counts) {
+    const statsGrid = document.getElementById('statsGrid');
+    statsGrid.innerHTML = `
+      <div class="stat-card">
+        <div class="stat-label">Total Reservations</div>
+        <div class="stat-value">${counts.total}</div>
+        <div class="stat-change positive">
+          <span>📅</span>
+          <span>All time bookings</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Confirmed</div>
+        <div class="stat-value">${counts.confirmed}</div>
+        <div class="stat-change positive">
+          <span>✓</span>
+          <span>${counts.total > 0 ? ((counts.confirmed / counts.total) * 100).toFixed(0) : 0}% of total</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Pending</div>
+        <div class="stat-value">${counts.pending}</div>
+        <div class="stat-change">
+          <span>⏳</span>
+          <span>Awaiting confirmation</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Cancelled</div>
+        <div class="stat-value">${counts.cancelled}</div>
+        <div class="stat-change negative">
+          <span>✕</span>
+          <span>Cancelled bookings</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function updateCharts(counts, reservations) {
+    // Destroy old charts if they exist
+    if (reservationChart) reservationChart.destroy();
+    if (revenueChart) revenueChart.destroy();
+
+    // Reservation status chart
+    const statusCtx = document.getElementById('reservationChart').getContext('2d');
+    reservationChart = new Chart(statusCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Confirmed', 'Pending', 'Cancelled'],
+        datasets: [{
+          data: [counts.confirmed, counts.pending, counts.cancelled],
+          backgroundColor: ['#388e3c', '#f57c00', '#d32f2f'],
+          borderColor: ['rgba(56,142,60,0.2)', 'rgba(245,124,0,0.2)', 'rgba(211,47,47,0.2)'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { 
+            position: 'bottom',
+            labels: { color: '#b0a99f', padding: 15, font: { size: 12, weight: '600' } }
+          }
+        }
+      }
+    });
+
+    // Revenue chart
+    const studyRevenue = reservations
+      .filter(r => r.room === 'study' && r.status !== 'Cancelled')
+      .reduce((sum, r) => sum + parseFloat(r.total || 0), 0);
+
+    const functionRevenue = reservations
+      .filter(r => r.room === 'function' && r.status !== 'Cancelled')
+      .reduce((sum, r) => sum + parseFloat(r.total || 0), 0);
+
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    revenueChart = new Chart(revenueCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Study Room', 'Function Room'],
+        datasets: [{
+          data: [studyRevenue, functionRevenue],
+          backgroundColor: ['#d3ad7f', '#ffb74d'],
+          borderColor: ['rgba(211,173,127,0.2)', 'rgba(255,183,77,0.2)'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { 
+            position: 'bottom',
+            labels: { color: '#b0a99f', padding: 15, font: { size: 12, weight: '600' } }
+          }
+        }
+      }
+    });
+  }
+
+  function updateTable(reservations) {
+    const tbody = document.getElementById('tableBody');
+    const recent = reservations.slice(0, 10);
+
+    tbody.innerHTML = recent.map(r => `
+      <tr>
+        <td><strong>${r.res_id}</strong></td>
+        <td>${r.name || r.email}</td>
+        <td>${new Date(r.res_date).toLocaleDateString()}</td>
+        <td><strong>${r.room === 'study' ? '📚 Study' : '🎉 Function'}</strong></td>
+        <td class="number">${r.pax}</td>
+        <td class="number">₱${parseFloat(r.total).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+        <td>
+          <span class="badge badge-${r.status === 'Confirmed' ? 'success' : r.status === 'Pending' ? 'warning' : 'danger'}">
+            ${r.status}
+          </span>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Load dashboard on page load
+  window.addEventListener('load', loadDashboard);
+  
+  // Auto-refresh every 30 seconds
+  setInterval(loadDashboard, 30000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,888 @@
+/* ======================================================
+   MENU PAGE CSS (FIXED)
+   - keeps all your styles
+   - adds missing layout rules
+   - fixes spacing / alignment / nav overlap
+   ====================================================== */
+
+/* -------------------
+   BACKGROUND
+-------------------- */
+body {
+    background: url(../image/menubg.png);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+/* FORCE body to be flex parent */
+body{
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 100vh !important;
+}
+
+html, body{
+  height: 100% !important;
+}
+
+/* -------------------
+   MAIN WRAPPER LAYOUT
+   (THIS WAS MISSING)
+-------------------- */
+.menu-wrapper{
+  flex: 1 !important;
+
+  /* ✅ fixes sidebar + grid side-by-side */
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+
+  /* ✅ prevents nav overlap (nav is fixed) */
+  padding: 140px 6% 60px;
+
+  /* ✅ keep content centered */
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* =====================
+   SIDEBAR
+===================== */
+.menu-sidebar {
+    width: 220px;
+    background: #1a1a1a;
+    padding: 25px;
+    border-radius: 18px;
+    color: white;
+    height: fit-content;
+    box-shadow: 0 0 25px rgba(255, 191, 105, 0.2);
+
+    /* ✅ makes it stay visible while scrolling */
+    position: sticky;
+    top: 120px;
+}
+
+.menu-sidebar h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+/* =====================
+   FILTER BUTTONS
+===================== */
+.filter-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #262626;
+    color: white;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.2s;
+
+    /* ✅ subtle depth */
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: #f6b26b;
+    color: #000;
+    font-weight: bold;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(246,178,107,0.35);
+}
+
+/* =====================
+   PRODUCT GRID
+===================== */
+.menu-grid {
+    display: grid;
+    flex: 1;
+    gap: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+
+    /* ✅ makes first row align properly */
+    align-items: stretch;
+}
+
+/* =====================
+   CARD STYLE
+===================== */
+.menu-card {
+    background: #1c1c1c;
+    border-radius: 18px;
+    padding: 18px;
+    color: white;
+    border: 1px solid #383838;
+    box-shadow: 0px 0px 25px rgba(255, 191, 105, 0.1);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+
+    /* ✅ improves shape + hover feel */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 340px;
+}
+
+.menu-card.fade-out {
+    opacity: 0;
+}
+
+.menu-card:hover{
+    transform: translateY(-6px);
+    transition: .25s ease;
+    box-shadow: 0px 12px 30px rgba(0,0,0,0.55),
+                0px 0px 20px rgba(246,178,107,0.35);
+    border-color: rgba(246,178,107,0.6);
+}
+
+/* IMAGE AREA */
+.img-container {
+    position: relative;
+    height: 180px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #111;
+}
+
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    /* ✅ cleaner look */
+    transform: scale(1);
+    transition: transform .35s ease;
+}
+
+.menu-card:hover .img-container img{
+    transform: scale(1.06);
+}
+
+.img-container .overlay {
+    position: absolute;
+    bottom: 0;
+    height: 40%;
+    width: 100%;
+    background: linear-gradient(transparent, #1c1c1c);
+}
+
+.menu-card h3 {
+    margin-top: 10px;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.menu-card p {
+    font-size: 0.9rem;
+    color: #c9c9c9;
+    margin: 6px 0 12px;
+    line-height: 1.4;
+}
+
+/* Bottom (price + view) */
+.bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ffc886;
+}
+
+.view-btn {
+    padding: 8px 16px;
+    background: #f6b26b;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #000;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.view-btn:hover {
+    background: #ff9f3b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255,159,59,0.4);
+}
+
+
+/* ======================================================
+   MENU PAGE CSS (FIXED)
+   - keeps all your styles
+   - adds missing layout rules
+   - fixes spacing / alignment / nav overlap
+   ====================================================== */
+
+/* -------------------
+   BACKGROUND
+-------------------- */
+body {
+    background: url(../image/menubg.png);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+/* FORCE body to be flex parent */
+body{
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 100vh !important;
+}
+
+html, body{
+  height: 100% !important;
+}
+
+/* -------------------
+   MAIN WRAPPER LAYOUT
+   (THIS WAS MISSING)
+-------------------- */
+.menu-wrapper{
+  flex: 1 !important;
+
+  /* ✅ fixes sidebar + grid side-by-side */
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+
+  /* ✅ prevents nav overlap (nav is fixed) */
+  padding: 140px 6% 60px;
+
+  /* ✅ keep content centered */
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* =====================
+   SIDEBAR
+===================== */
+.menu-sidebar {
+    width: 220px;
+    background: #1a1a1a;
+    padding: 25px;
+    border-radius: 18px;
+    color: white;
+    height: fit-content;
+    box-shadow: 0 0 25px rgba(255, 191, 105, 0.2);
+
+    /* ✅ makes it stay visible while scrolling */
+    position: sticky;
+    top: 120px;
+}
+
+.menu-sidebar h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+/* =====================
+   FILTER BUTTONS
+===================== */
+.filter-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #262626;
+    color: white;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.2s;
+
+    /* ✅ subtle depth */
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: #f6b26b;
+    color: #000;
+    font-weight: bold;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(246,178,107,0.35);
+}
+
+/* =====================
+   PRODUCT GRID
+===================== */
+.menu-grid {
+    display: grid;
+    flex: 1;
+    gap: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+
+    /* ✅ makes first row align properly */
+    align-items: stretch;
+}
+
+/* =====================
+   CARD STYLE
+===================== */
+.menu-card {
+    background: #1c1c1c;
+    border-radius: 18px;
+    padding: 18px;
+    color: white;
+    border: 1px solid #383838;
+    box-shadow: 0px 0px 25px rgba(255, 191, 105, 0.1);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+
+    /* ✅ improves shape + hover feel */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 340px;
+}
+
+.menu-card.fade-out {
+    opacity: 0;
+}
+
+.menu-card:hover{
+    transform: translateY(-6px);
+    transition: .25s ease;
+    box-shadow: 0px 12px 30px rgba(0,0,0,0.55),
+                0px 0px 20px rgba(246,178,107,0.35);
+    border-color: rgba(246,178,107,0.6);
+}
+
+/* IMAGE AREA */
+.img-container {
+    position: relative;
+    height: 180px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #111;
+}
+
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    /* ✅ cleaner look */
+    transform: scale(1);
+    transition: transform .35s ease;
+}
+
+.menu-card:hover .img-container img{
+    transform: scale(1.06);
+}
+
+.img-container .overlay {
+    position: absolute;
+    bottom: 0;
+    height: 40%;
+    width: 100%;
+    background: linear-gradient(transparent, #1c1c1c);
+}
+
+.menu-card h3 {
+    margin-top: 10px;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.menu-card p {
+    font-size: 0.9rem;
+    color: #c9c9c9;
+    margin: 6px 0 12px;
+    line-height: 1.4;
+}
+
+/* Bottom (price + view) */
+.bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ffc886;
+}
+
+.view-btn {
+    padding: 8px 16px;
+    background: #f6b26b;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #000;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.view-btn:hover {
+    background: #ff9f3b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255,159,59,0.4);
+}
+
+
+
+
+
+/* ======================================================
+   EXTRA RESPONSIVE + POLISH (ADDED ONLY)
+   - laptops / tablets / phones / small phones
+   ====================================================== */
+
+/* ---------- Large desktop polish ---------- */
+@media (min-width: 1400px){
+  .menu-wrapper{
+    gap: 55px; 
+    padding: 150px 7% 70px;
+  }
+  .menu-card{
+    min-height: 360px;
+  }
+  .menu-card h3{ font-size: 1.45rem; }
+  .menu-card p{ font-size: 1rem; }
+}
+
+/* ---------- Laptops / small desktop ---------- */
+@media (max-width: 1200px){
+  .menu-wrapper{
+    gap: 30px;
+    padding: 135px 5% 55px;
+  }
+  .menu-grid{
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 22px;
+  }
+}
+
+/* ---------- Tablets ---------- */
+@media (max-width: 900px){
+  .menu-wrapper{
+    padding: 120px 5% 50px;
+  }
+  .menu-sidebar{
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 0 18px rgba(255,191,105,0.18);
+  }
+  .filter-btn{
+    font-size: .95rem;
+    padding: 11px;
+  }
+  .menu-card{
+    min-height: 320px;
+  }
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 700px){
+  .menu-wrapper{
+    padding: 110px 4% 45px;
+  }
+  .menu-grid{
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 18px;
+  }
+  .img-container{
+    height: 165px;
+  }
+  .menu-card h3{
+    font-size: 1.15rem;
+  }
+  .menu-card p{
+    font-size: .85rem;
+  }
+  .price{
+    font-size: 1.05rem;
+  }
+  .view-btn{
+    padding: 7px 14px;
+    font-size: .9rem;
+  }
+}
+
+/* ---------- Small phones ---------- */
+@media (max-width: 480px){
+  .menu-wrapper{
+    padding: 105px 3.5% 40px;
+  }
+  .menu-sidebar{
+    padding: 18px;
+  }
+  .filter-btn{
+    font-size: .9rem;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  .menu-grid{
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .menu-card{
+    padding: 15px;
+    border-radius: 16px;
+    min-height: auto;
+  }
+  .img-container{
+    height: 155px;
+  }
+}
+
+/* ---------- Ultra small phones ---------- */
+@media (max-width: 360px){
+  .menu-wrapper{
+    padding: 100px 3% 35px;
+  }
+  .menu-card h3{ font-size: 1.05rem; }
+  .menu-card p{ font-size: .8rem; }
+  .view-btn{
+    padding: 6px 12px;
+    font-size: .85rem;
+  }
+}
+
+/* ---------- Smooth / crisp feel ---------- */
+.menu-grid, .menu-wrapper, .menu-card{
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Prevent sidebar shrinking weirdly ---------- */
+.menu-sidebar{
+  flex-shrink: 0;
+}
+/* ======================================================
+   MOBILE/TABLET FIX for Categories layout
+   (ADD ONLY – no removals)
+   ====================================================== */
+
+/* tablets + phones */
+@media (max-width: 950px){
+
+  /* make categories look like a clean panel */
+  .menu-sidebar{
+    width: 100% !important;
+    padding: 18px 16px !important;
+    border-radius: 16px !important;
+
+    /* less height feeling */
+    max-height: none !important;
+
+    /* softer bg so it blends */
+    background: rgba(20,20,20,0.92) !important;
+    backdrop-filter: blur(10px);
+  }
+
+  .menu-sidebar h2{
+    font-size: 1.3rem !important;
+    margin-bottom: 12px !important;
+    text-align: left !important;
+  }
+
+  /* turn buttons into 2-column compact grid */
+  .menu-sidebar{
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .menu-sidebar h2{
+    grid-column: span 2 !important;
+  }
+
+  .filter-btn{
+    border-radius: 10px !important;
+    padding: 10px 10px !important;
+    font-size: .95rem !important;
+    margin-bottom: 0 !important;
+
+    /* center text */
+    text-align: center !important;
+
+    /* prevent long buttons */
+    min-height: 44px;
+  }
+}
+
+
+/* phones */
+@media (max-width: 600px){
+
+  /* 1-column stack so it doesn't look crowded */
+  .menu-sidebar{
+    grid-template-columns: 1fr !important;
+    padding: 16px 14px !important;
+  }
+
+  .menu-sidebar h2{
+    grid-column: span 1 !important;
+  }
+
+  .filter-btn{
+    width: 100% !important;
+    font-size: .9rem !important;
+    padding: 9px !important;
+  }
+
+  /* tighten wrapper spacing */
+  .menu-wrapper{
+    gap: 18px !important;
+  }
+}
+
+
+/* small phones */
+@media (max-width: 420px){
+
+  .menu-sidebar{
+    padding: 14px 12px !important;
+    border-radius: 14px !important;
+  }
+
+  .filter-btn{
+    font-size: .85rem !important;
+    padding: 8px !important;
+    min-height: 40px;
+  }
+
+  /* cards full width + nicer breathing space */
+  .menu-grid{
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .menu-card{
+    border-radius: 14px !important;
+  }
+}
+/* ======================================================
+   CATEGORIES → HORIZONTAL BAR (tablet/phone)
+   ADD ONLY – no removals
+   ====================================================== */
+
+@media (max-width: 950px){
+
+  /* wrapper stays column, categories becomes top bar */
+  .menu-wrapper{
+    flex-direction: column !important;
+    gap: 18px !important;
+    padding: 125px 5% 50px !important;
+  }
+
+  /* categories bar */
+  .menu-sidebar{
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+
+    padding: 12px 12px !important;
+    border-radius: 14px !important;
+    background: rgba(20,20,20,0.95) !important;
+    backdrop-filter: blur(10px);
+
+    /* bar behavior */
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+
+    /* sticky bar under fixed nav */
+    position: sticky !important;
+    top: 95px !important;
+    z-index: 50 !important;
+
+    /* remove grid from earlier responsive rules */
+    grid-template-columns: none !important;
+  }
+
+  /* hide scrollbar but allow swipe */
+  .menu-sidebar::-webkit-scrollbar{
+    height: 0;
+  }
+
+  /* Categories title turns into small label */
+  .menu-sidebar h2{
+    flex: 0 0 auto !important;
+    margin: 0 8px 0 0 !important;
+    font-size: 1.1rem !important;
+    letter-spacing: .6px;
+    opacity: .9;
+  }
+
+  /* buttons become compact chips */
+  .filter-btn{
+    flex: 0 0 auto !important;
+    width: auto !important;
+
+    padding: 10px 16px !important;
+    font-size: .95rem !important;
+    border-radius: 999px !important;
+    margin-bottom: 0 !important;
+
+    background: #262626 !important;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: none !important;
+  }
+
+  .filter-btn.active,
+  .filter-btn:hover{
+    background: #f6b26b !important;
+    color: #000 !important;
+    font-weight: 700 !important;
+    transform: none !important;
+    box-shadow: 0 0 10px rgba(246,178,107,0.45) !important;
+  }
+}
+
+
+/* phones */
+@media (max-width: 600px){
+  .menu-sidebar{
+    top: 85px !important;
+    padding: 10px !important;
+    gap: 8px !important;
+  }
+
+  .filter-btn{
+    padding: 8px 14px !important;
+    font-size: .88rem !important;
+  }
+}
+
+
+/* small phones */
+@media (max-width: 420px){
+  .menu-sidebar h2{
+    font-size: 1rem !important;
+  }
+
+  .filter-btn{
+    padding: 7px 12px !important;
+    font-size: .82rem !important;
+  }
+}
+/* ======================================================
+   FIX: always show 2 columns when space allows
+   + smoother feel
+   ====================================================== */
+
+@media (max-width: 900px){
+
+  /* make grid take full row */
+  .menu-grid{
+    width: 100% !important;
+    grid-template-columns: repeat(2, minmax(220px, 1fr)) !important;
+    justify-content: center;
+  }
+
+  /* prevent any card from stretching full width */
+  .menu-card{
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* smoother animations */
+  .menu-card,
+  .filter-btn,
+  .view-btn,
+  .img-container img{
+    transition: all .28s ease !important;
+  }
+}
+
+/* only collapse to 1 column on tiny phones */
+@media (max-width: 420px){
+  .menu-grid{
+    grid-template-columns: 1fr !important;
+  }
+}
+/* make sidebar behave like a real top bar (single-row) */
+@media (max-width: 950px){
+
+  .menu-sidebar{
+    display: flex !important;
+    align-items: center !important;
+
+    flex-wrap: nowrap !important;     /* ✅ NEVER wrap */
+    width: 100% !important;
+    gap: 10px !important;
+    padding: 12px 12px !important;
+
+    overflow-x: auto !important;      /* ✅ allow sideways scroll */
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: thin;            /* firefox */
+  }
+
+  /* optional: hide scrollbar in webkit, still scrollable */
+  .menu-sidebar::-webkit-scrollbar{
+    height: 6px;
+  }
+
+  .menu-sidebar h2{
+    margin: 0 8px 0 0 !important;
+    font-size: 1rem !important;
+    white-space: nowrap !important;
+    flex: 0 0 auto !important;        /* ✅ fixed label */
+  }
+
+  .filter-btn{
+    flex: 0 0 auto !important;        /* ✅ stay natural size */
+    min-width: 110px !important;      /* adjust to your taste */
+    margin: 0 !important;
+    padding: 8px 14px !important;
+    font-size: clamp(.78rem, 1.6vw, .95rem) !important;
+    text-align: center !important;
+    border-radius: 999px !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* PHONE — still a bar, just smaller buttons */
+@media (max-width: 600px){
+
+  .menu-sidebar{
+    gap: 8px !important;
+    padding: 10px !important;
+  }
+
+  .menu-sidebar h2{
+    font-size: .95rem !important;
+  }
+
+  .filter-btn{
+    min-width: 95px !important;
+    padding: 7px 12px !important;
+    font-size: .8rem !important;
+  }
+}
+
+/* SMALL PHONES — still one bar, scroll if needed */
+@media (max-width: 420px){
+
+  .filter-btn{
+    min-width: 90px !important;
+    font-size: .78rem !important;
+    padding: 7px 10px !important;
+  }
+}

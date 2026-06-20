@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Booking | BatCave Café</title>
+
+  <!-- GSAP (animations) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <!-- Flatpickr (calendar) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <!-- page styles -->
+  <link rel="stylesheet" href="booking.css" />
+  <link rel="stylesheet" href="../home_page/style.css" />
+   <link rel="stylesheet" href="../home_page/nav.css">
+   <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+</head>
+<body>
+
+  <header class="premium-nav">
+
+  <!-- LEFT LOGO -->
+  <div class="nav-logo">
+    <img src="../image/Cafelogo.png" alt="Logo">
+
+    <div class="brand-text bat-wings">
+      Bat Cave Café
+    </div>
+  </div>
+
+  <!-- HAMBURGER (shows only on tablet/phone) -->
+  <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- RIGHT ROUNDED MENU (pages) -->
+  <div class="nav-rounded">
+    <a href="../home_page/home.html" class="active-menu">Home</a>
+    <a href="../home_page/about.html">About Us</a>
+    <a href="../home_page/menu.html">Menu</a>
+    <a href="../reservation/booking.html">Book</a>
+  </div>
+
+</header>
+
+<!-- ================= MOBILE / TABLET SIDEBAR ================= -->
+<aside class="nav-sidebar" id="navSidebar" aria-hidden="true">
+  <button class="nav-close" id="navClose" aria-label="Close menu">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <div class="nav-sidebar-links">
+    <a href="../home_page/home.html">Home</a>
+    <a href="../home_page/about.html">About Us</a>
+    <a href="../home_page/menu.html">Menu</a>
+    <a href="../reservation/booking.html" class="active-menu">Book</a>
+
+  </div>
+</aside>
+
+<!-- overlay -->
+<div class="nav-overlay" id="navOverlay"></div>
+
+  <!-- HERO / BACKDROP -->
+  <div class="hero" aria-hidden="true">
+    <img class="hero-bg" src="../image/studyroom.png" alt="cave background">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <!-- BOOKING FORM -->
+  <main class="booking-container" aria-live="polite">
+<!-- STEP 1: PRE-RESERVE CARD (SHOWS FIRST) -->
+<section id="preReserveCard" class="pre-reserve" role="region" aria-labelledby="preTitle">
+  <div class="pre-card">
+    <div class="pre-image">
+      <img src="../image/bookstudyroom.png" alt="Bat Cave Study Room">
+    </div>
+
+    <div class="pre-info">
+      <div class="pre-top">
+        <h2 id="preTitle">Bat Cave Study Room</h2>
+        <span class="chip">Cozy</span>
+      </div>
+
+      <p class="pre-meta">Capacity: <strong id="roomCapacity">20 pax</strong></p>
+      <p class="pre-meta"><span id="roomTotalReservations">9</span> total reservations in this room.</p>
+
+      <div class="pre-bar">
+        <div class="pre-bar-label">
+          Pax left on <strong id="paxDate"></strong>
+          <span id="paxCount">18/20</span>
+        </div>
+        <div class="progress">
+          <span id="progressFill" class="progress-fill" style="width:90%"></span>
+        </div>
+      </div>
+
+      <button id="openBookingBtn" class="pre-btn">Reserve</button>
+    </div>
+  </div>
+</section>
+
+    <section id="bookingCard" class="booking-card is-hidden" role="region" aria-labelledby="bookingTitle">
+
+
+      <div class="room-preview" aria-hidden="false">
+        <img src="../image/bookstudyroom.png" alt="room preview">
+        <div class="room-preview-label">Room Preview</div>
+      </div>
+
+      <!-- UPDATED FORM -->
+      <form id="bookingForm" class="booking-form" novalidate>
+
+  <h2 id="bookingTitle">Reserve Your Perfect Brew Moment</h2>
+  <p class="hint">Pick a date and time — estimated cost updates live.</p>
+
+  <!-- EMAIL AND DATE -->
+  <div class="row">
+    <label>Email <span class="req"></span>
+      <input id="email" name="email" type="email" placeholder="you@example.com" required>
+    </label>
+
+    <label>Reservation Date <span class="req"></span>
+      <input id="date" name="date" type="text" class="picker" placeholder="Select a date" required autocomplete="off">
+    </label>
+  </div>
+
+  <!-- START TIME AND END TIME -->
+  <div class="row">
+    <label>Start Time <span class="req"></span>
+      <div class="time-dropdown-wrapper">
+        <input id="startTime" name="startTime" type="text" class="time-picker" placeholder="Select start time" readonly>
+        <span class="clock-icon">⏰</span>
+        <div class="time-dropdown horizontal" id="startTimeDropdown">
+          <div class="time-box">
+            <label>Hour</label>
+            <select id="startHour"></select>
+          </div>
+          <div class="time-box">
+            <label>Min</label>
+            <select id="startMinute"></select>
+          </div>
+          <div class="time-box">
+            <label>AM/PM</label>
+            <select id="startAmPm">
+              <option>AM</option>
+              <option>PM</option>
+            </select>
+          </div>
+          <button type="button" class="btn primary" id="startTimeSet">Set</button>
+        </div>
+      </div>
+    </label>
+
+    <label>End Time <span class="req"></span>
+      <div class="time-dropdown-wrapper">
+        <input id="endTime" name="endTime" type="text" class="time-picker" placeholder="Select end time" readonly>
+        <span class="clock-icon">⏰</span>
+        <div class="time-dropdown horizontal" id="endTimeDropdown">
+          <div class="time-box">
+            <label>Hour</label>
+            <select id="endHour"></select>
+          </div>
+          <div class="time-box">
+            <label>Min</label>
+            <select id="endMinute"></select>
+          </div>
+          <div class="time-box">
+            <label>AM/PM</label>
+            <select id="endAmPm">
+              <option>AM</option>
+              <option>PM</option>
+            </select>
+          </div>
+          <button type="button" class="btn primary" id="endTimeSet">Set</button>
+
+        </div>
+      </div>
+    </label>
+  </div>
+
+  <!-- ROOM TYPE AND NUMBER OF PEOPLE -->
+  <div class="row">
+    <label>Room Type
+      <select id="roomType" name="roomType">
+        <option value="study">Study Room</option>
+        <option value="function">Function</option>
+      </select>
+    </label>
+
+    <label>Number of People
+      <input id="pax" name="pax" type="number" min="1" value="1" required>
+    </label>
+  </div>
+
+  <!-- PROJECTOR -->
+  <!-- PROJECTOR, SPEAKER & MIC, BASE HOUR, MINIMUM, ESTIMATED TOTAL -->
+<div style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;">
+
+  <!-- Projector -->
+  <label class="checkbox" style="display:flex;align-items:center;gap:3px;">
+    <input id="proj" name="proj" type="checkbox">
+    Projector (₱150/hr)
+  </label>
+
+  <!-- Speaker & Mic -->
+  <label class="checkbox" style="display:flex;align-items:center;gap:3px;">
+    <input id="audio" name="audio" type="checkbox">
+    Speaker & Mic (₱150/hr)
+  </label>
+
+  <!-- Estimate box -->
+  <div class="estimate" aria-live="polite" style="flex-direction:column;align-items:flex-start;gap:6px;">
+    <div style="display:flex;justify-content:flex-start;gap:8px;">
+      <div class="small">Base hourly rate:</div>
+      <div class="value">₱50 / hour</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;justify-content:flex-start;gap:4px;">
+      <div class="small">Minimum fee (if &lt; 2 hours):</div>
+      <div class="value">₱75</div>
+    </div>
+
+    <div class="estimated-total" aria-hidden="false" style="margin-top:1px; padding-top:1px;">
+      <div class="label">Estimated Total:</div>
+      <div id="estimated" class="amount">₱0</div>
+    </div>
+  </div>
+
+</div>
+
+
+  <!-- ACTION BUTTONS (auto-calc when fields change) -->
+  <div class="actions">
+    <button id="submitBtn" type="submit" class="btn accent">Reserve</button>
+    <button id="resetBtn" type="button" class="btn ghost">Reset</button>
+  </div>
+
+</form>
+
+    </section>
+  </main>
+
+  <!-- CONFIRMATION MODAL -->
+  <div id="confirmModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true">
+      <button class="modal-close" id="closeModal" aria-label="Close">×</button>
+
+      <div class="modal-header">
+        <h3>Reservation Confirmed</h3>
+        <p id="welcomeText" class="muted"></p>
+      </div>
+
+      <div class="modal-body">
+        <ul class="details">
+          <li><strong>Date:</strong> <span id="c-date"></span></li>
+          <li><strong>Time:</strong> <span id="c-time"></span></li>
+          <li><strong>Hours:</strong> <span id="c-hours"></span></li>
+          <li><strong>Room:</strong> <span id="c-room"></span></li>
+          <li><strong>Equipment:</strong> <span id="c-eq"></span></li>
+          <li><strong>Email:</strong> <span id="c-contact"></span></li>
+          <li><strong>Estimated Fee:</strong> <span id="c-fee"></span></li>
+          <li><strong>Reservation ID:</strong> <span id="c-id"></span></li>
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button id="doneBtn" class="btn primary">Done</button>
+      </div>
+    </div>
+  </div>
+<footer class="coffee-footer">
+
+  <div class="footer-container">
+
+    <!-- COLUMN 1 — BRAND -->
+    <div class="footer-col">
+      <h3 class="footer-brand-title">
+        <i class="fas fa-mug-hot"></i> Malvar Bat Cave Café
+      </h3>
+      <p>
+        Your late-night sanctuary in Malvar.<br>
+        Coffee, comfort, and connection for every BSU student.
+      </p>
+    </div>
+
+    <!-- COLUMN 2 — PAGES -->
+    <div class="footer-col">
+      <h4>Pages</h4>
+      <a href="home.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="menu.html">Menu</a>
+      <a href="../reservation/booking.html">Reservation</a>
+    </div>
+
+    <!-- COLUMN 3 — SOCIALS -->
+    <div class="footer-col">
+      <h4>Follow Us</h4>
+      <a href="#"><i class="fa-brands fa-facebook"></i> Facebook</a>
+      <a href="#"><i class="fa-brands fa-instagram"></i> Instagram</a>
+      <a href="#"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+    </div>
+
+    <!-- COLUMN 4 — CONTACT INFO -->
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p><i class="fas fa-map-marker-alt"></i> Malvar, Batangas</p>
+      <p><i class="fas fa-phone"></i> +63 9XX XXX XXXX</p>
+      <p><i class="fas fa-envelope"></i> batcavecaffe@gmail.com</p>
+      <p><i class="fas fa-globe"></i> www.batcavecaffe.com</p>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>Design by <span>@sedricklaketiteniggadick</span> for IT 313</p>
+    <p>© 2025 Malvar Bat Cave Café. All rights reserved.</p>
+  </div>
+
+</footer>
+  <!-- script -->
+  <script src="booking.config.js"></script>
+<script src="booking.dom.js"></script>
+<script src="booking.timepicker.js"></script>
+<script src="booking.helpers.js"></script>
+<script src="booking.rules.js"></script>
+<script src="booking.estimate.js"></script>
+<script src="booking.submit.js"></script>
+<script src="booking.ui.js"></script>
+<script src="booking.main.js"></script>
+<script src="booking.datepicker.js"></script>
+  <script src="availableroom.js"></script>
+<script src="../home_page/nav.js"></script>
+</body>
+</html>

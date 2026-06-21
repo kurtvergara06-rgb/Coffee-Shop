@@ -3,11 +3,6 @@
 A responsive coffee shop website made using **HTML, CSS, and JavaScript**.  
 It allows users to explore the coffee shop, view the menu, learn about the business, and make reservations.
 
-## 🌐 Live Preview
-
-Visit the website here:
-
-[Open Coffee-Shop Website](https://kurtvergara06-rgb.github.io/Coffee-Shop/)
 
 ## 📸 Website Preview
 

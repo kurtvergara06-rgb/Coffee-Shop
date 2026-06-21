@@ -11,9 +11,7 @@ Visit the website here:
 
 ## 📸 Website Preview
 
-![Coffee-Shop Website Preview](image/preview.png)
-
-> Add a screenshot of your homepage inside the `image` folder and name it `preview.png`.
+![Coffee-Shop Website Preview](Preview/home_page_home.html.png)
 
 ## ✨ Features
 
@@ -31,4 +29,3 @@ Visit the website here:
 - HTML
 - CSS
 - JavaScript
-
